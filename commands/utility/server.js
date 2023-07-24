@@ -6,6 +6,6 @@ module.exports = {
         .setName('server')
         .setDescription('information about the server'),
     async execute(interaction){
-        await interaction.reply(`Welcome to ${interaction.guild.name} and has ${interaction.guild.max_members}`);
+        await interaction.reply(`Welcome to ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
     },
 };
