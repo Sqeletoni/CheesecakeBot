@@ -1,10 +1,33 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const { REST } = require("@discordjs/rest")
+const { Routes } =  require("@discord-api-types/v9")
+const { player, Player} = require("discord-player")
+
 const { token } = require("./config.json");
 
+
 //new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+	GatewayIntentBits.MessageContent,
+	GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMembers,
+  ],
+});
+
+client.player = new Player(client, {
+	ytdlOptions:{
+		quality: "highestaudio",
+		highWaterMark: 1 << 25
+	}
+})
+
+
 
 //creates and loads all the commands from commandsDir
 client.commands = new Collection();
@@ -26,7 +49,9 @@ for (const folder of commandFolders) {
 		}
 	}
 }
-//read files and load individually
+
+
+//loads and handles the events from the events folder
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
@@ -39,6 +64,7 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
 
 //Log in Discord HAS TO BE AT THE BOTTOM
 client.login(token);

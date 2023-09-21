@@ -6,6 +6,7 @@ module.exports = {
         .setName('ping')
         .setDescription('pong!'),
     async execute(interaction){
-        await interaction.reply(`Pong! ${client.ws.ping}ms.`);
+        const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+        interaction.editReply(`pong! ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
     },
 };

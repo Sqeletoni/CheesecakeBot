@@ -9,6 +9,7 @@ module.exports = {
     const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) {
+      interaction.reply("Not a valid command")
       console.error(
         `No command matching ${interaction.commandName} was found.`
       );
